@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:10000'; // Default for local dev, should be changed for prod Vercel
+const API_BASE_URL = '/api';
 
 let currentUser = null;
 let currentRole = null;
