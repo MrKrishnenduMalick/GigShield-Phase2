@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Dict, Any
@@ -131,3 +132,6 @@ def get_admin_insights():
 @app.get("/api")
 def read_root():
     return {"message": "Earn Protector API Running"}
+
+# Serve frontend static files natively
+app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
