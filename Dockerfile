@@ -1,13 +1,9 @@
-FROM python:3.11-slim
+FROM python:3.10
 
 WORKDIR /app
-COPY requirements.txt .
+
+COPY backend/ /app
+
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
-
-# Expose the standard Cloud Run / Railway port fallback
-ENV PORT=8000
-EXPOSE 8000
-
-CMD uvicorn main:app --host 0.0.0.0 --port $PORT
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "10000"]

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earn Protector</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Notification Container -->
+    <div id="toast-container"></div>
+    
+    <!-- Login Screen -->
+    <div id="login-section" class="screen active">
+        <div class="login-wrapper">
+            <h1 class="brand-title">Perfect for Your Worker</h1>
+            <p class="brand-subtitle">[ Earn Protector ]</p>
+            
+            <div class="cards-container">
+                <div class="login-card worker-card" onclick="login('raju')">
+                    <div class="card-icon"><i class="fa-solid fa-motorcycle"></i></div>
+                    <h3>Delivery Worker</h3>
+                    <p>Login as Worker (Raju)</p>
+                </div>
+                
+                <div class="login-card worker-card" onclick="login('priya')">
+                    <div class="card-icon"><i class="fa-solid fa-bicycle"></i></div>
+                    <h3>Delivery Worker</h3>
+                    <p>Login as Worker (Priya)</p>
+                </div>
+                
+                <div class="login-card admin-card" onclick="login('admin')">
+                    <div class="card-icon"><i class="fa-solid fa-user-shield"></i></div>
+                    <h3>Admin</h3>
+                    <p>Login as Manager</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Worker Dashboard -->
+    <div id="worker-dashboard" class="screen">
+        <header>
+            <div class="header-content">
+                <h2>Earn Protector</h2>
+                <div class="user-controls">
+                    <span id="worker-name-display"></span>
+                    <div class="notification-bell" onclick="toggleNotifications()">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="badge" id="worker-notif-badge">0</span>
+                    </div>
+                    <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i></button>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard-content">
+            <div class="stats-grid">
+                <div class="stat-card highlight">
+                    <h3>Protected Earnings</h3>
+                    <div class="stat-value">₹2,450</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Weekly Coverage</h3>
+                    <div class="stat-value">Active <i class="fa-solid fa-shield-check" style="color: #4CAF50"></i></div>
+                </div>
+            </div>
+
+            <div class="action-panel">
+                <button id="start-shift-btn" class="btn primary-btn" onclick="startShift()">
+                    <i class="fa-solid fa-play"></i> Start Delivery Shift
+                </button>
+                <button id="file-claim-btn" class="btn warning-btn disabled" onclick="openClaimModal()" disabled>
+                    <i class="fa-solid fa-triangle-exclamation"></i> File a Claim
+                </button>
+            </div>
+
+            <div class="history-panel">
+                <h3>Claim History</h3>
+                <div class="history-list" id="worker-history">
+                    <div class="empty-state">No recent claims</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard" class="screen">
+        <header>
+            <div class="header-content">
+                <h2>Admin Hub</h2>
+                <div class="user-controls">
+                    <div class="notification-bell" onclick="toggleNotifications()">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="badge" id="admin-notif-badge">0</span>
+                    </div>
+                    <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i></button>
+                </div>
+            </div>
+        </header>
+        
+        <div class="dashboard-content">
+            <div class="stats-grid admin-stats">
+                <div class="stat-card">
+                    <h3>Total Claims</h3>
+                    <div class="stat-value" id="admin-total-claims">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Approved</h3>
+                    <div class="stat-value success" id="admin-approved-claims">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Warnings</h3>
+                    <div class="stat-value warning" id="admin-warning-claims">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Rejected</h3>
+                    <div class="stat-value danger" id="admin-rejected-claims">0</div>
+                </div>
+                <div class="stat-card full-width">
+                    <h3>Average Risk Score</h3>
+                    <div class="risk-meter-container">
+                        <div class="risk-meter-bar" id="admin-avg-risk-bar" style="width: 0%"></div>
+                    </div>
+                    <div class="stat-value" id="admin-avg-risk">0%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Sidebar -->
+    <div id="notification-sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h3>Notifications</h3>
+            <button class="close-btn" onclick="toggleNotifications()"><i class="fa-solid fa-times"></i></button>
+        </div>
+        <div class="sidebar-content" id="notification-list">
+            <!-- Notifications injected here -->
+        </div>
+    </div>
+
+    <!-- Claim Modal with AI Checking Animation -->
+    <div id="claim-modal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>AI Fraud Detection</h2>
+                <button class="close-btn modal-close" onclick="closeModal()"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="animation-container">
+                    <div class="step" id="step-gps">
+                        <div class="step-icon"><i class="fa-solid fa-location-dot"></i></div>
+                        <div class="step-text">Verifying Location...</div>
+                        <div class="step-status spinner"></div>
+                    </div>
+                    <div class="step" id="step-weather">
+                        <div class="step-icon"><i class="fa-solid fa-cloud-bolt"></i></div>
+                        <div class="step-text">Analyzing Weather Data...</div>
+                        <div class="step-status spinner"></div>
+                    </div>
+                    <div class="step" id="step-delivery">
+                        <div class="step-icon"><i class="fa-solid fa-box"></i></div>
+                        <div class="step-text">Checking Delivery Logs...</div>
+                        <div class="step-status spinner"></div>
+                    </div>
+                </div>
+                
+                <div id="claim-result" class="result-container hidden">
+                    <div class="risk-display">
+                        <h3>Risk Score</h3>
+                        <div class="risk-circle">
+                            <span id="risk-percentage">0%</span>
+                        </div>
+                    </div>
+                    <div class="decision-display" id="decision-text">
+                        Processing...
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn secondary-btn" onclick="closeModal()">Cancel</button>
+                <button class="btn primary-btn" id="trigger-ai-btn" onclick="runAI()">Run AI Check</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payout Simulation Modal -->
+    <div id="payout-modal" class="modal-overlay payout">
+        <div class="modal payout-modal">
+            <div class="success-animation">
+                <div class="checkmark-circle">
+                    <div class="background"></div>
+                    <div class="checkmark draw"></div>
+                </div>
+            </div>
+            <h2>Claim Approved!</h2>
+            <p class="amount">₹850.00</p>
+            <p class="payout-msg">💸 Your lost wages credited instantly via UPI</p>
+            <button class="btn primary-btn" onclick="closePayoutModal()">Awesome</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
